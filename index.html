@@ -18,6 +18,12 @@
             --light-bg: #f8f9fa;
             --accent-orange: #e67e22;
             --accent-purple: #9b59b6;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 6rem;
+            --border-radius: 1rem;
         }
 
         body {
@@ -25,14 +31,18 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         .hero-section {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
             color: white;
-            padding: 140px 0 120px;
+            padding: var(--spacing-xl) 0;
             position: relative;
             overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
         }
 
         .hero-section::before {
@@ -58,13 +68,14 @@
 
         .role-card {
             border: none;
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             transition: all 0.4s ease;
             border-top: 5px solid var(--primary-green);
             height: 100%;
             overflow: hidden;
             position: relative;
+            margin-bottom: var(--spacing-md);
         }
 
         .role-card::before {
@@ -195,7 +206,7 @@
 
         .features-section {
             background: white;
-            padding: 120px 0;
+            padding: var(--spacing-xl) 0;
             position: relative;
         }
 
@@ -239,7 +250,7 @@
         .footer {
             background: linear-gradient(135deg, var(--dark-blue) 0%, #34495e 100%);
             color: white;
-            padding: 60px 0 30px;
+            padding: var(--spacing-lg) 0 var(--spacing-md);
         }
 
         .nav-pills .nav-link.active {
@@ -332,7 +343,7 @@
 
         .stats-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 100px 0;
+            padding: var(--spacing-xl) 0;
             position: relative;
         }
 
@@ -417,7 +428,7 @@
         }
 
         .testimonials-section {
-            padding: 120px 0;
+            padding: var(--spacing-xl) 0;
         }
 
         .testimonial-content {
@@ -430,7 +441,8 @@
         }
 
         .section-spacing {
-            margin-bottom: 6rem;
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg) 0;
         }
 
         .content-spacing {
@@ -452,16 +464,17 @@
 
         .pricing-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 120px 0;
+            padding: var(--spacing-xl) 0;
         }
 
         .pricing-card {
             border: none;
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             transition: all 0.4s ease;
             overflow: hidden;
             position: relative;
+            margin-bottom: var(--spacing-md);
         }
 
         .pricing-card.featured {
@@ -524,6 +537,157 @@
             margin-right: 10px;
             font-size: 1.2rem;
         }
+
+        /* Improved spacing and responsiveness */
+        .section-container {
+            padding: var(--spacing-lg) 0;
+        }
+
+        .container-fluid-custom {
+            padding-left: var(--spacing-md);
+            padding-right: var(--spacing-md);
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-xs: 0.25rem;
+                --spacing-sm: 0.5rem;
+                --spacing-md: 1rem;
+                --spacing-lg: 2rem;
+                --spacing-xl: 3rem;
+            }
+
+            .hero-section {
+                min-height: 80vh;
+                padding: var(--spacing-lg) 0;
+            }
+
+            .display-4 {
+                font-size: 2.5rem;
+            }
+
+            .display-5 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+                margin-bottom: 1rem;
+            }
+
+            .role-card {
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .card-content {
+                padding: var(--spacing-md);
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+                margin-top: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+
+            .feature-box {
+                padding: var(--spacing-md);
+            }
+
+            .testimonial-content {
+                padding: var(--spacing-md);
+            }
+
+            .navbar-nav {
+                text-align: center;
+                margin-top: var(--spacing-sm);
+            }
+
+            .navbar-nav .nav-item {
+                margin-bottom: var(--spacing-xs);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1140px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1320px;
+            }
+        }
+
+        /* Enhanced spacing utilities */
+        .spacing-xs { margin-bottom: var(--spacing-xs); }
+        .spacing-sm { margin-bottom: var(--spacing-sm); }
+        .spacing-md { margin-bottom: var(--spacing-md); }
+        .spacing-lg { margin-bottom: var(--spacing-lg); }
+        .spacing-xl { margin-bottom: var(--spacing-xl); }
+
+        .padding-xs { padding: var(--spacing-xs); }
+        .padding-sm { padding: var(--spacing-sm); }
+        .padding-md { padding: var(--spacing-md); }
+        .padding-lg { padding: var(--spacing-lg); }
+        .padding-xl { padding: var(--spacing-xl); }
+
+        /* Improved alignment */
+        .text-justify {
+            text-align: justify;
+        }
+
+        .align-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Enhanced visual hierarchy */
+        .lead {
+            font-size: 1.25rem;
+            font-weight: 300;
+        }
+
+        .display-6 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Improved button spacing */
+        .btn + .btn {
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 576px) {
+            .btn + .btn {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Enhanced card spacing */
+        .card-body-spacing {
+            padding: var(--spacing-lg);
+        }
+
+        /* Better form controls */
+        .form-control {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+        }
+
+        /* Improved image responsiveness */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -575,18 +739,18 @@
             <i class="bi bi-sun floating-shape" style="bottom: 20%; right: 25%; font-size: 3rem;"></i>
         </div>
         <div class="container position-relative">
-            <div class="row align-items-center">
+            <div class="row align-items-center justify-content-center">
                 <div class="col-lg-8 mx-auto text-center">
                     <div class="logo-icon pulse-animation">
                         <i class="bi bi-seedling"></i>
                     </div>
-                    <h1 class="display-4 fw-bold mb-4 animate-fade-in content-spacing">
+                    <h1 class="display-4 fw-bold mb-4 animate-fade-in spacing-lg">
                         Climate-Smart Farming & Nutrition Platform
                     </h1>
-                    <p class="lead mb-5 fs-5 content-spacing">
+                    <p class="lead mb-5 fs-5 spacing-lg">
                         Empowering Sri Lankan farmers and families with AI-driven insights for sustainable agriculture and healthier living.
                     </p>
-                    <div class="d-flex flex-column flex-md-row justify-content-center hero-buttons">
+                    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center hero-buttons">
                         <a href="#farmer" class="btn btn-light btn-lg px-5 py-3 fw-semibold mb-3 mb-md-0 me-md-3">
                             <i class="bi bi-tractor me-2"></i>I'm a Farmer
                         </a>
@@ -603,9 +767,9 @@
     </section>
 
     <!-- Role Selection Section -->
-    <section class="py-5 section-spacing" id="farmer">
+    <section class="section-container" id="farmer">
         <div class="container">
-            <div class="row g-5">
+            <div class="row g-5 justify-content-center">
                 <!-- Farmer Card -->
                 <div class="col-lg-6">
                     <div class="card role-card h-100 animate-fade-in">
@@ -619,18 +783,18 @@
                             </p>
                             
                             <div class="row text-start role-features">
-                                <div class="col-6">
+                                <div class="col-12 col-md-6">
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Soil Analysis</p>
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Crop Planning</p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-md-6">
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Market Access</p>
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Weather Insights</p>
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-column btn-group-spacing">
-                                <a href="/farmer_dash.html" class="btn btn-primary-custom btn-lg">
+                            <div class="d-flex flex-column flex-md-row justify-content-center btn-group-spacing">
+                                <a href="/farmer_dash.html" class="btn btn-primary-custom btn-lg me-md-2 mb-2 mb-md-0">
                                     Enter Farmer Portal
                                 </a>
                                 <a href="#" class="btn btn-outline-custom">Learn More</a>
@@ -652,18 +816,18 @@
                             </p>
                             
                             <div class="row text-start role-features">
-                                <div class="col-6">
+                                <div class="col-12 col-md-6">
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Meal Scanner</p>
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Nutrition Analysis</p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-md-6">
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Meal Planning</p>
                                     <p class="mb-4"><i class="bi bi-check-circle-fill text-success me-2"></i>Farm Connect</p>
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-column btn-group-spacing">
-                                <a href="/family-dashboard" class="btn btn-primary-custom btn-lg">
+                            <div class="d-flex flex-column flex-md-row justify-content-center btn-group-spacing">
+                                <a href="/family-dashboard" class="btn btn-primary-custom btn-lg me-md-2 mb-2 mb-md-0">
                                     Enter Family Portal
                                 </a>
                                 <a href="#" class="btn btn-outline-custom">Learn More</a>
@@ -676,16 +840,16 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features-section section-spacing" id="features">
+    <section class="features-section section-container" id="features">
         <div class="container">
-            <div class="text-center mb-5 content-spacing">
+            <div class="text-center mb-5 spacing-lg">
                 <h2 class="display-5 fw-bold mb-4 section-title">Why Choose Our Platform?</h2>
                 <p class="lead text-muted fs-5">Comprehensive solutions for modern agricultural and nutritional challenges</p>
             </div>
 
-            <div class="row g-5">
+            <div class="row g-5 justify-content-center">
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-box feature-highlight">
+                    <div class="feature-box feature-highlight h-100">
                         <div class="feature-icon">
                             <i class="bi bi-robot"></i>
                         </div>
@@ -694,7 +858,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-box feature-highlight">
+                    <div class="feature-box feature-highlight h-100">
                         <div class="feature-icon">
                             <i class="bi bi-recycle"></i>
                         </div>
@@ -703,7 +867,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-box feature-highlight">
+                    <div class="feature-box feature-highlight h-100">
                         <div class="feature-icon">
                             <i class="bi bi-phone"></i>
                         </div>
@@ -712,7 +876,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="feature-box feature-highlight">
+                    <div class="feature-box feature-highlight h-100">
                         <div class="feature-icon">
                             <i class="bi bi-people-fill"></i>
                         </div>
@@ -725,16 +889,16 @@
     </section>
 
     <!-- Solutions/Pricing Section -->
-    <section class="pricing-section section-spacing" id="pricing">
+    <section class="pricing-section section-container" id="pricing">
         <div class="container">
-            <div class="text-center mb-5 content-spacing">
+            <div class="text-center mb-5 spacing-lg">
                 <h2 class="display-5 fw-bold mb-4 section-title">Our Solutions</h2>
                 <p class="lead text-muted fs-5">Choose the plan that works best for your needs</p>
             </div>
 
             <div class="row g-4 justify-content-center">
                 <!-- Basic Plan -->
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="pricing-card h-100">
                         <div class="pricing-header">
                             <h3 class="h4">Starter</h3>
@@ -756,7 +920,7 @@
                 </div>
 
                 <!-- Pro Plan -->
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="pricing-card h-100 featured">
                         <div class="pricing-header">
                             <h3 class="h4">Professional</h3>
@@ -779,7 +943,7 @@
                 </div>
 
                 <!-- Enterprise Plan -->
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="pricing-card h-100">
                         <div class="pricing-header">
                             <h3 class="h4">Enterprise</h3>
@@ -805,22 +969,22 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats-section section-spacing">
+    <section class="stats-section section-container">
         <div class="container">
             <div class="row text-center g-5">
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-number">5000+</div>
                     <p class="text-muted fw-semibold fs-5">Farmers Registered</p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-number">15000+</div>
                     <p class="text-muted fw-semibold fs-5">Families Served</p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-number">98%</div>
                     <p class="text-muted fw-semibold fs-5">Satisfaction Rate</p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-number">24/7</div>
                     <p class="text-muted fw-semibold fs-5">Support Available</p>
                 </div>
@@ -829,14 +993,14 @@
     </section>
 
     <!-- Testimonials -->
-    <section class="testimonials-section section-spacing" id="about">
+    <section class="testimonials-section section-container" id="about">
         <div class="container">
-            <div class="text-center mb-5 content-spacing">
+            <div class="text-center mb-5 spacing-lg">
                 <h2 class="display-5 fw-bold mb-4 section-title">What Our Users Say</h2>
                 <p class="lead text-muted fs-5">Hear from farmers and families who transformed their lives with our platform</p>
             </div>
-            <div class="row g-5">
-                <div class="col-md-4">
+            <div class="row g-5 justify-content-center">
+                <div class="col-md-6 col-lg-4">
                     <div class="card testimonial-card h-100">
                         <div class="card-body text-center testimonial-content">
                             <img src="https://ui-avatars.com/api/?name=Kamal+Perera&background=27ae60&color=fff&size=128" class="testimonial-avatar" alt="Kamal Perera">
@@ -852,7 +1016,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="card testimonial-card h-100">
                         <div class="card-body text-center testimonial-content">
                             <img src="https://ui-avatars.com/api/?name=Nisha+Fernando&background=e67e22&color=fff&size=128" class="testimonial-avatar" alt="Nisha Fernando">
@@ -868,7 +1032,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-4">
                     <div class="card testimonial-card h-100">
                         <div class="card-body text-center testimonial-content">
                             <img src="https://ui-avatars.com/api/?name=Anura+Rathnayake&background=9b59b6&color=fff&size=128" class="testimonial-avatar" alt="Anura Rathnayake">
@@ -889,7 +1053,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer" id="contact">
+    <footer class="footer section-container" id="contact">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 mb-4 mb-md-0">
@@ -900,13 +1064,13 @@
                     <p class="text-light mb-0">Empowering sustainable agriculture and healthy nutrition for Sri Lankan communities.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <div class="d-flex justify-content-md-end gap-4 mb-3">
+                    <div class="d-flex justify-content-md-end justify-content-center gap-4 mb-3">
                         <a href="#" class="text-light fs-4"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="text-light fs-4"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="text-light fs-4"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="text-light fs-4"><i class="bi bi-linkedin"></i></a>
                     </div>
-                    <p class="mb-0 text-light">© 2025 Aharaya Krushi. All Rights Reserved.</p>
+                    <p class="mb-0 text-light text-center text-md-end">© 2025 Aharaya Krushi. All Rights Reserved.</p>
                 </div>
             </div>
         </div>
@@ -943,7 +1107,7 @@
                     </div>
                     <div class="mt-4">
                         <p class="text-muted">Contact our sales team to discuss custom enterprise solutions tailored to your organization's needs.</p>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 flex-column flex-md-row">
                             <button class="btn btn-success">Schedule a Demo</button>
                             <button class="btn btn-outline-secondary">Download Brochure</button>
                         </div>
