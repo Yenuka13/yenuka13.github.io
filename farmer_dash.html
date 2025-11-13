@@ -475,6 +475,75 @@
             margin: 0.5rem 0;
         }
 
+        /* Crop Recommendation Panel Styles */
+        .recommendation-card {
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .crop-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+        }
+
+        .crop-details {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .crop-details li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .crop-details li i {
+            margin-right: 0.5rem;
+            color: var(--primary-green);
+        }
+
+        .season-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .season-winter { background-color: #3498db; }
+        .season-summer { background-color: #e74c3c; }
+        .season-monsoon { background-color: #2980b9; }
+        .season-all { background-color: #27ae60; }
+
+        .profit-meter {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .profit-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .profit-high { background-color: var(--primary-green); width: 85%; }
+        .profit-medium { background-color: var(--warning); width: 65%; }
+        .profit-low { background-color: var(--danger); width: 40%; }
+
         /* Responsive adjustments */
         @media (min-width: 576px) {
             .mobile-header {
@@ -1420,13 +1489,164 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Crop Recommendations -->
+                                        <!-- Crop Recommendations Panel -->
                                         <div class="row mt-4">
                                             <div class="col-12">
-                                                <h5 class="card-title">Recommended Crops</h5>
-                                                <div class="alert alert-success">
-                                                    <i class="bi bi-lightbulb me-2"></i>
-                                                    <strong>Based on your soil analysis:</strong> We recommend planting tomatoes, bell peppers, and cucumbers in the next season for optimal yield.
+                                                <h5 class="card-title mb-3">Crop Recommendations</h5>
+                                                <p class="text-muted mb-4">Based on your soil analysis, weather patterns, and market trends, here are the best crops for your farm:</p>
+                                                
+                                                <div class="row g-3 g-md-4">
+                                                    <!-- Recommended Crop 1 -->
+                                                    <div class="col-md-4">
+                                                        <div class="card recommendation-card h-100">
+                                                            <div class="card-body position-relative">
+                                                                <span class="badge bg-success recommendation-badge">Top Pick</span>
+                                                                <div class="text-center mb-3">
+                                                                    <i class="bi bi-flower1 crop-icon text-success"></i>
+                                                                </div>
+                                                                <h6 class="card-title text-center">Tomatoes</h6>
+                                                                <div class="text-center mb-3">
+                                                                    <span class="badge bg-primary me-1">
+                                                                        <span class="season-indicator season-summer"></span>
+                                                                        Summer
+                                                                    </span>
+                                                                    <span class="badge bg-info">
+                                                                        <span class="season-indicator season-winter"></span>
+                                                                        Winter
+                                                                    </span>
+                                                                </div>
+                                                                <p class="small text-muted text-center">High demand in local markets with excellent profit potential</p>
+                                                                
+                                                                <div class="crop-details">
+                                                                    <ul class="list-unstyled">
+                                                                        <li><i class="bi bi-thermometer-half"></i> Optimal Temp: 20-30°C</li>
+                                                                        <li><i class="bi bi-droplet"></i> Water Needs: Moderate</li>
+                                                                        <li><i class="bi bi-clock"></i> Harvest: 70-90 days</li>
+                                                                        <li><i class="bi bi-currency-dollar"></i> Profit Potential:</li>
+                                                                    </ul>
+                                                                    <div class="profit-meter">
+                                                                        <div class="profit-fill profit-high"></div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-3 text-center">
+                                                                    <button class="btn btn-sm btn-success">Add to Plan</button>
+                                                                    <button class="btn btn-sm btn-outline-primary ms-2">Details</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Recommended Crop 2 -->
+                                                    <div class="col-md-4">
+                                                        <div class="card recommendation-card h-100">
+                                                            <div class="card-body position-relative">
+                                                                <span class="badge bg-warning recommendation-badge">Good Match</span>
+                                                                <div class="text-center mb-3">
+                                                                    <i class="bi bi-capsule crop-icon text-warning"></i>
+                                                                </div>
+                                                                <h6 class="card-title text-center">Bell Peppers</h6>
+                                                                <div class="text-center mb-3">
+                                                                    <span class="badge bg-primary me-1">
+                                                                        <span class="season-indicator season-summer"></span>
+                                                                        Summer
+                                                                    </span>
+                                                                    <span class="badge bg-info">
+                                                                        <span class="season-indicator season-winter"></span>
+                                                                        Winter
+                                                                    </span>
+                                                                </div>
+                                                                <p class="small text-muted text-center">Consistent market demand with good shelf life</p>
+                                                                
+                                                                <div class="crop-details">
+                                                                    <ul class="list-unstyled">
+                                                                        <li><i class="bi bi-thermometer-half"></i> Optimal Temp: 18-27°C</li>
+                                                                        <li><i class="bi bi-droplet"></i> Water Needs: Moderate</li>
+                                                                        <li><i class="bi bi-clock"></i> Harvest: 60-80 days</li>
+                                                                        <li><i class="bi bi-currency-dollar"></i> Profit Potential:</li>
+                                                                    </ul>
+                                                                    <div class="profit-meter">
+                                                                        <div class="profit-fill profit-medium"></div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-3 text-center">
+                                                                    <button class="btn btn-sm btn-success">Add to Plan</button>
+                                                                    <button class="btn btn-sm btn-outline-primary ms-2">Details</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Recommended Crop 3 -->
+                                                    <div class="col-md-4">
+                                                        <div class="card recommendation-card h-100">
+                                                            <div class="card-body position-relative">
+                                                                <span class="badge bg-info recommendation-badge">Alternative</span>
+                                                                <div class="text-center mb-3">
+                                                                    <i class="bi bi-tree crop-icon text-info"></i>
+                                                                </div>
+                                                                <h6 class="card-title text-center">Cucumbers</h6>
+                                                                <div class="text-center mb-3">
+                                                                    <span class="badge bg-primary">
+                                                                        <span class="season-indicator season-summer"></span>
+                                                                        Summer
+                                                                    </span>
+                                                                </div>
+                                                                <p class="small text-muted text-center">Fast-growing with multiple harvest cycles</p>
+                                                                
+                                                                <div class="crop-details">
+                                                                    <ul class="list-unstyled">
+                                                                        <li><i class="bi bi-thermometer-half"></i> Optimal Temp: 22-30°C</li>
+                                                                        <li><i class="bi bi-droplet"></i> Water Needs: High</li>
+                                                                        <li><i class="bi bi-clock"></i> Harvest: 50-70 days</li>
+                                                                        <li><i class="bi bi-currency-dollar"></i> Profit Potential:</li>
+                                                                    </ul>
+                                                                    <div class="profit-meter">
+                                                                        <div class="profit-fill profit-medium"></div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-3 text-center">
+                                                                    <button class="btn btn-sm btn-success">Add to Plan</button>
+                                                                    <button class="btn btn-sm btn-outline-primary ms-2">Details</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Additional Recommendations -->
+                                                <div class="row mt-4">
+                                                    <div class="col-12">
+                                                        <div class="card metric-card">
+                                                            <div class="card-body">
+                                                                <h6 class="card-title">Additional Recommendations</h6>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="d-flex align-items-center mb-3">
+                                                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                                            <span>Consider intercropping with legumes to improve soil nitrogen</span>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center mb-3">
+                                                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                                            <span>Rotate crops to prevent soil-borne diseases</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="d-flex align-items-center mb-3">
+                                                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                                            <span>Plant cover crops during off-season to protect soil</span>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center mb-3">
+                                                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                                            <span>Consider drip irrigation for water efficiency</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
