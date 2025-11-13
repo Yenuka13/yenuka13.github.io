@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPK Sensor Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f0f4ff;
+      color: #222;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #005eff;
+      margin-bottom: 10px;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 180px;
+      transition: 0.3s;
+    }
+    .card:hover { transform: scale(1.05); }
+    .value { font-size: 24px; font-weight: bold; color: #007bff; }
+    canvas {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌿 ESP32 Smart Soil Dashboard</h1>
+  <p>Real-time readings from your NPK Sensor</p>
+
+  <div class="cards">
+    <div class="card"><h3>Nitrogen (N)</h3><div class="value" id="nitrogen">--</div></div>
+    <div class="card"><h3>Phosphorus (P)</h3><div class="value" id="phosphorus">--</div></div>
+    <div class="card"><h3>Potassium (K)</h3><div class="value" id="potassium">--</div></div>
+    <div class="card"><h3>pH</h3><div class="value" id="phValue">--</div></div>
+    <div class="card"><h3>Conductivity</h3><div class="value" id="conductivity">--</div></div>
+  </div>
+
+  <canvas id="npkChart"></canvas>
+
+  <script>
+    // ======== HTML References ========
+    const nitrogenEl = document.getElementById('nitrogen');
+    const phosphorusEl = document.getElementById('phosphorus');
+    const potassiumEl = document.getElementById('potassium');
+    const phEl = document.getElementById('phValue');
+    const conductivityEl = document.getElementById('conductivity');
+
+    // ======== Chart.js Setup ========
+    const ctx = document.getElementById('npkChart').getContext('2d');
+    const npkChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'pH', 'Conductivity'],
+        datasets: [{
+          label: 'Sensor Readings',
+          data: [0, 0, 0, 0, 0],
+          backgroundColor: ['#4285F4', '#34A853', '#FBBC05', '#EA4335', '#9C27B0']
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // ======== Fetch Data from ESP32 ========
+    async function fetchSensorData() {
+      try {
+        const response = await fetch('http://10.20.0.100/data'); // ESP32 endpoint
+        const data = await response.json();
+
+        // Update cards
+        nitrogenEl.innerText = data.Nitrogen ?? '--';
+        phosphorusEl.innerText = data.Phosphorus ?? '--';
+        potassiumEl.innerText = data.Potassium ?? '--';
+        phEl.innerText = data.pH ?? '--';
+        conductivityEl.innerText = data.Conductivity ?? '--';
+
+        // Update chart
+        npkChart.data.datasets[0].data = [
+          data.Nitrogen || 0,
+          data.Phosphorus || 0,
+          data.Potassium || 0,
+          data.pH || 0,
+          data.Conductivity || 0
+        ];
+        npkChart.update();
+      } catch (error) {
+        console.error("Failed to fetch sensor data:", error);
+      }
+    }
+
+    // Auto-refresh every 2 seconds
+    setInterval(fetchSensorData, 2000);
+
+    // Initial fetch
+    fetchSensorData();
+  </script>
+</body>
+</html>
