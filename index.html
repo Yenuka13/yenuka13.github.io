@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Gate Ticket Verifier</title>
+    <!-- HTML5 QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; width: 100%; max-width: 480px; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 20px; }
+        .result-box { display: none; margin-top: 15px; padding: 18px; border-radius: 12px; text-align: left; }
+        .success { background: #e6f4ea; border: 2px solid #34a853; color: #137333; }
+        .warning { background: #fef7e0; border: 2px solid #f9ab00; color: #b06000; }
+        .error { background: #fce8e6; border: 2px solid #ea4335; color: #c5221f; }
+        .detail-row { display: flex; justify-content: space-between; margin: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 6px; }
+        button { background: #1a73e8; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 12px; }
+        input[type="text"] { width: calc(100% - 24px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🎟️ Event Ticket Verifier</h2>
+    
+    <div id="reader"></div>
+
+    <div style="margin-top: 10px;">
+        <input type="text" id="manualId" placeholder="Or type Unique ID (e.g. HP11A06)">
+        <button onclick="verifyManualInput()">Verify ID Manually</button>
+    </div>
+
+    <div id="resultBox" class="result-box">
+        <h3 id="statusTitle" style="margin-top: 0; font-size: 20px;"></h3>
+        <div class="detail-row"><span>Full Name:</span> <strong id="resName">-</strong></div>
+        <div class="detail-row"><span>Unique ID:</span> <strong id="resId">-</strong></div>
+        <div class="detail-row"><span>Class:</span> <strong id="resClass">-</strong></div>
+        <div class="detail-row"><span>Admission No:</span> <strong id="resAdm">-</strong></div>
+        <div class="detail-row"><span>Status:</span> <strong id="resStatus">-</strong></div>
+        
+        <button onclick="resumeScanning()">Scan Next Attendee</button>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx5OAwtPHRMx4ol1MeOg-9PIKTBRWBHSoEHHVvUqSeRhOf5G7u4cA5vV9IUny0x9kp/exec"; 
+
+    const html5QrCode = new Html5Qrcode("reader");
+
+    function onScanSuccess(decodedText) {
+        html5QrCode.pause();
+        verifyTicket(decodedText.trim());
+    }
+
+    function verifyManualInput() {
+        const id = document.getElementById("manualId").value.trim();
+        if (id) {
+            html5QrCode.pause();
+            verifyTicket(id);
+        }
+    }
+
+    function verifyTicket(uniqueId) {
+        const resultBox = document.getElementById("resultBox");
+        resultBox.style.display = "block";
+        resultBox.className = "result-box";
+        document.getElementById("statusTitle").innerText = "⏳ Checking Database...";
+
+        fetch(`${SCRIPT_URL}?action=verify&id=${encodeURIComponent(uniqueId)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "SUCCESS") {
+                    resultBox.className = "result-box success";
+                    document.getElementById("statusTitle").innerText = "✅ VALID REGISTRATION";
+                    document.getElementById("resName").innerText = data.name;
+                    document.getElementById("resId").innerText = data.id;
+                    document.getElementById("resClass").innerText = data.class;
+                    document.getElementById("resAdm").innerText = data.admission;
+                    document.getElementById("resStatus").innerText = "CHECKED-IN";
+                } else if (data.status === "ALREADY_CHECKED_IN") {
+                    resultBox.className = "result-box warning";
+                    document.getElementById("statusTitle").innerText = "⚠️ ALREADY CHECKED IN";
+                    document.getElementById("resName").innerText = data.name;
+                    document.getElementById("resId").innerText = data.id;
+                    document.getElementById("resClass").innerText = data.class;
+                    document.getElementById("resAdm").innerText = data.admission;
+                    document.getElementById("resStatus").innerText = "ENTRY ALREADY RECORDED";
+                } else {
+                    resultBox.className = "result-box error";
+                    document.getElementById("statusTitle").innerText = "❌ INVALID TICKET";
+                    document.getElementById("resName").innerText = "Not Found";
+                    document.getElementById("resId").innerText = uniqueId;
+                    document.getElementById("resClass").innerText = "N/A";
+                    document.getElementById("resAdm").innerText = "N/A";
+                    document.getElementById("resStatus").innerText = "NOT REGISTERED";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                resultBox.className = "result-box error";
+                document.getElementById("statusTitle").innerText = "❌ Server Error";
+            });
+    }
+
+    function resumeScanning() {
+        document.getElementById("resultBox").style.display = "none";
+        document.getElementById("manualId").value = "";
+        html5QrCode.resume();
+    }
+
+    Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+            const backCamera = devices.find(d => d.label.toLowerCase().includes('back')) || devices[0];
+            html5QrCode.start(backCamera.id, { fps: 10, qrbox: { width: 220, height: 220 } }, onScanSuccess);
+        }
+    });
+</script>
+
+</body>
+</html>
