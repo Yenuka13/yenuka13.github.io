@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Gate Ticket Verifier</title>
-    <!-- HTML5 QR Code Scanner Library -->
+    <!-- Lightweight HTML5 QR Code library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
@@ -16,7 +16,10 @@
         .error { background: #fce8e6; border: 2px solid #ea4335; color: #c5221f; }
         .detail-row { display: flex; justify-content: space-between; margin: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 6px; }
         button { background: #1a73e8; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 12px; }
+        .pay-btn { background: #e37400; margin-top: 6px; }
         input[type="text"] { width: calc(100% - 24px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; text-align: center; }
+        .status-paid { color: #137333; font-weight: bold; }
+        .status-unpaid { color: #c5221f; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -37,8 +40,10 @@
         <div class="detail-row"><span>Unique ID:</span> <strong id="resId">-</strong></div>
         <div class="detail-row"><span>Class:</span> <strong id="resClass">-</strong></div>
         <div class="detail-row"><span>Admission No:</span> <strong id="resAdm">-</strong></div>
-        <div class="detail-row"><span>Status:</span> <strong id="resStatus">-</strong></div>
+        <div class="detail-row"><span>Payment Status:</span> <strong id="resPayment">-</strong></div>
+        <div class="detail-row"><span>Check-In Status:</span> <strong id="resStatus">-</strong></div>
         
+        <button id="payButton" class="pay-btn" style="display: none;" onclick="confirmGatePayment()">💵 Collect Payment & Mark Paid</button>
         <button onclick="resumeScanning()">Scan Next Attendee</button>
     </div>
 </div>
@@ -47,6 +52,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx5OAwtPHRMx4ol1MeOg-9PIKTBRWBHSoEHHVvUqSeRhOf5G7u4cA5vV9IUny0x9kp/exec"; 
 
     const html5QrCode = new Html5Qrcode("reader");
+    let currentScannedId = "";
 
     function onScanSuccess(decodedText) {
         html5QrCode.pause();
@@ -61,31 +67,43 @@
         }
     }
 
-    function verifyTicket(uniqueId) {
+    function verifyTicket(uniqueId, markPaid = false) {
+        currentScannedId = uniqueId;
         const resultBox = document.getElementById("resultBox");
+        const payBtn = document.getElementById("payButton");
         resultBox.style.display = "block";
         resultBox.className = "result-box";
         document.getElementById("statusTitle").innerText = "⏳ Checking Database...";
+        payBtn.style.display = "none";
 
-        fetch(`${SCRIPT_URL}?action=verify&id=${encodeURIComponent(uniqueId)}`)
+        let url = `${SCRIPT_URL}?action=verify&id=${encodeURIComponent(uniqueId)}`;
+        if (markPaid) {
+            url += `&markPaid=true`;
+        }
+
+        fetch(url)
             .then(res => res.json())
             .then(data => {
-                if (data.status === "SUCCESS") {
-                    resultBox.className = "result-box success";
-                    document.getElementById("statusTitle").innerText = "✅ VALID REGISTRATION";
+                if (data.status === "SUCCESS" || data.status === "ALREADY_CHECKED_IN") {
+                    const isAlreadyChecked = data.status === "ALREADY_CHECKED_IN";
+                    resultBox.className = isAlreadyChecked ? "result-box warning" : "result-box success";
+                    document.getElementById("statusTitle").innerText = isAlreadyChecked ? "⚠️ ALREADY CHECKED IN" : "✅ VALID REGISTRATION";
+                    
                     document.getElementById("resName").innerText = data.name;
                     document.getElementById("resId").innerText = data.id;
                     document.getElementById("resClass").innerText = data.class;
                     document.getElementById("resAdm").innerText = data.admission;
-                    document.getElementById("resStatus").innerText = "CHECKED-IN";
-                } else if (data.status === "ALREADY_CHECKED_IN") {
-                    resultBox.className = "result-box warning";
-                    document.getElementById("statusTitle").innerText = "⚠️ ALREADY CHECKED IN";
-                    document.getElementById("resName").innerText = data.name;
-                    document.getElementById("resId").innerText = data.id;
-                    document.getElementById("resClass").innerText = data.class;
-                    document.getElementById("resAdm").innerText = data.admission;
-                    document.getElementById("resStatus").innerText = "ENTRY ALREADY RECORDED";
+                    document.getElementById("resStatus").innerText = isAlreadyChecked ? "ENTRY ALREADY RECORDED" : "CHECKED-IN";
+
+                    const isPaid = String(data.payment).toLowerCase() === "paid";
+                    const payElem = document.getElementById("resPayment");
+                    payElem.innerText = isPaid ? "✅ PAID" : "❌ UNPAID";
+                    payElem.className = isPaid ? "status-paid" : "status-unpaid";
+
+                    // If unpaid, show gate payment option
+                    if (!isPaid) {
+                        payBtn.style.display = "block";
+                    }
                 } else {
                     resultBox.className = "result-box error";
                     document.getElementById("statusTitle").innerText = "❌ INVALID TICKET";
@@ -93,6 +111,7 @@
                     document.getElementById("resId").innerText = uniqueId;
                     document.getElementById("resClass").innerText = "N/A";
                     document.getElementById("resAdm").innerText = "N/A";
+                    document.getElementById("resPayment").innerText = "N/A";
                     document.getElementById("resStatus").innerText = "NOT REGISTERED";
                 }
             })
@@ -101,6 +120,12 @@
                 resultBox.className = "result-box error";
                 document.getElementById("statusTitle").innerText = "❌ Server Error";
             });
+    }
+
+    function confirmGatePayment() {
+        if (currentScannedId && confirm("Confirm payment collected at entrance?")) {
+            verifyTicket(currentScannedId, true);
+        }
     }
 
     function resumeScanning() {
